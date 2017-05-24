@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2000-2017 TeamDev Ltd. All rights reserved.
+  ~ TeamDev PROPRIETARY and CONFIDENTIAL.
+  ~ Use is subject to license terms.
+  -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <style>
+    html, body, iframe, iron-doc-element, #demo {
+      height: 100%;
+      border: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    iframe {
+      width: 100%;
+    }
+
+    iron-doc-element {
+      padding: 48px 16px 16px;
+      display: none;
+    }
+
+    #demo {
+      position: relative;
+      padding: 48px 0 0;
+      display: none;
+    }
+
+    #header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      left: 0;
+      background-color: #5B6E8C;
+      z-index: 1000;
+    }
+
+    #header[shadowbelow="true"] {
+      box-shadow: var(--shadow-elevation-3dp_-_box-shadow);
+    }
+
+    #header > button {
+      font-family: Robot, sans-serif;
+      font-size: 14px;
+      background-color: inherit;
+      color: white;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 16px 16px;
+      transition: .3s;
+    }
+
+    #header > button:hover {
+      background-color: rgba(0, 0, 0, .12);
+    }
+
+    #header > button[active="true"] {
+      background-color: rgba(0, 0, 0, .24);
+    }
+
+    .demo-placeholder {
+      font-family: Robot, sans-serif;
+      font-size: 20px;
+      color: var(--light-theme-secondary-color);
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #demo-icon {
+      width: 40px;
+      height: 40px;
+      float: left;
+      padding: 4px 15px 0 16px;
+    }
+
+    .st0{fill-rule:evenodd;clip-rule:evenodd;fill:white;}
+    .st1{fill-rule:evenodd;clip-rule:evenodd;fill:white;}
+  </style>
+
+  <title>__TITLE__</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../iron-doc-viewer/iron-doc-element.html">
+</head>
+<body>
+  <div id="header" onclick="handleTabChange(event)">
+    <a id="demo-icon" href="https://github.com/SpineElements">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 34 34" style="enable-background:new 0 0 34 34;" xml:space="preserve">
+      <g>
+        <path class="st0" d="M25.7,28L33,17L25.7,6v1.9l6,9.1l-6,9.1V28L25.7,28z M8.3,28L1,17L8.3,6v1.9l-6,9.1l6,9.1V28L8.3,28z"/>
+        <path class="st1" d="M9.7,14.8c4.9,0,9.7,0,14.6,0c0.3,0,0.5,0.5,0.5,0.7c0,0.9,0,1.9,0,2.8c0,0.3-0.2,0.5-0.5,0.5
+          c-4.9,0-9.7,0-14.6,0c-0.3,0-0.5-0.2-0.5-0.5c0-0.9,0-1.9,0-2.8C9.2,15.3,9.5,14.8,9.7,14.8L9.7,14.8z M22.7,16
+          c-0.5,0-0.8,0.4-0.8,0.8c0,0.5,0.4,0.8,0.8,0.8c0.5,0,0.8-0.4,0.8-0.8C23.5,16.4,23.2,16,22.7,16L22.7,16z M9.7,20.8h14.6
+          c0.3,0,0.5,0.5,0.5,0.7v2.8c0,0.3-0.2,0.5-0.5,0.5H9.7c-0.3,0-0.5-0.2-0.5-0.5v-2.8C9.2,21.3,9.5,20.8,9.7,20.8L9.7,20.8z
+           M22.7,21.9c-0.5,0-0.8,0.4-0.8,0.8c0,0.5,0.4,0.8,0.8,0.8c0.5,0,0.8-0.4,0.8-0.8C23.5,22.3,23.2,21.9,22.7,21.9L22.7,21.9z
+           M9.7,8.9h14.6c0.3,0,0.5,0.5,0.5,0.7v2.8c0,0.3-0.2,0.5-0.5,0.5H9.7c-0.3,0-0.5-0.2-0.5-0.5V9.6C9.2,9.4,9.5,8.9,9.7,8.9L9.7,8.9z
+           M22.7,10c-0.5,0-0.8,0.4-0.8,0.8c0,0.5,0.4,0.8,0.8,0.8c0.5,0,0.8-0.4,0.8-0.8C23.5,10.4,23.2,10,22.7,10L22.7,10z"/>
+      </g>
+      </svg>
+    </a>
+    __ELEMENT_NAVIGATION_ITEMS__
+    <button contentid="demo">DEMO</button>
+  </div>
+
+  __ELEMENTS_CONTENT__
+
+  <div id="demo">
+    <iframe allowfullscreen></iframe>
+    <div class="demo-placeholder">Loading demo...</div>
+  </div>
+</body>
+
+<script>
+  document.addEventListener('scroll', handleScroll);
+
+  document.querySelector('#header > button').setAttribute('active', 'true');
+
+  const demoIframe = document.querySelector('#demo > iframe');
+  const demoSrc = window.location.href + 'demo/index.html';
+  demoIframe.src = demoSrc;
+
+  let activeElement = document.body.querySelector(`#__MAIN_ELEMENT__`);
+  activeElement.style.display = 'block';
+
+  checkDemoSource();
+
+  function handleTabChange(event) {
+    const activeTab = document.querySelector('#header > button[active="true"]');
+    const nextContentId = event.target.getAttribute('contentid');
+    if (activeTab !== event.target && nextContentId) {
+      const nextTabContent = document.querySelector(`#${nextContentId}`);
+      nextTabContent.style.display = 'block';
+      activeElement.style.display = 'none';
+      activeElement = nextTabContent;
+
+      activeTab.setAttribute('active', 'false');
+      event.target.setAttribute('active', 'true');
+    }
+  }
+
+  function handleScroll() {
+    const header = document.body.querySelector('#header');
+    if (activeElement.getBoundingClientRect().top < 0) {
+      header.setAttribute('shadowbelow', 'true');
+    } else {
+      header.setAttribute('shadowbelow', 'false');
+    }
+  }
+
+  function checkDemoSource() {
+    const xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = () => {
+      if (xmlHttp.readyState === 4) {
+        if (xmlHttp.status !== 200) {
+          const demoNode = document.body.querySelector('#demo');
+          document.body.querySelector('.demo-placeholder').innerText = 'No demo found';
+          demoNode.removeChild(demoIframe);
+        } else {
+          const demoPlaceholder = document.body.querySelector('.demo-placeholder');
+          demoPlaceholder.parentNode.removeChild(demoPlaceholder);
+        }
+      }
+    };
+    xmlHttp.open("HEAD", demoSrc, true);
+    xmlHttp.send(null);
+  }
+</script>
+</html>
