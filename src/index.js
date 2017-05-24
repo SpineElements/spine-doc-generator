@@ -28,14 +28,10 @@ module.exports = {
       const processingPackage = !Boolean(
           metadata.elements.find(item => item.path.indexOf(path.sep) === -1));
 
-      const absoluteDirPath = /^(\D:\\)/.test(itemsRootPath) || /^\//.test(itemsRootPath) // checking is path absolute or not
-          ? itemsRootPath
-          : `${process.cwd()}${path.sep}${itemsRootPath}`;
-
       elements = splitByElements(metadata.elements);
 
       console.log(`Processing ${processingPackage ? "package" : "element"} ` +
-                  `from the ${absoluteDirPath.replace("./", "")} directory`);
+                  `from the ${itemsRootPath} directory`);
 
       createDocFiles(elements, itemsRootPath, processingPackage);
     });
@@ -104,13 +100,13 @@ module.exports = {
     function getElementDocViewer(element) {
       const elementName = element.tagname;
 
-      const isItemFromExternalDependency = fileName
-          => /(\bbower_modules\b)|(\bnode_modules\b)/.test(fileName);
+      const isItemFromExternalDependency = fileName =>
+          /(\bbower_modules\b)|(\bnode_modules\b)/.test(fileName);
 
-      element.methods = element.methods.filter(method
-          => !isItemFromExternalDependency(method.sourceRange.file));
-      element.properties = element.properties.filter(property
-          => !isItemFromExternalDependency(property.sourceRange.file));
+      element.methods = element.methods.filter(method =>
+          !isItemFromExternalDependency(method.sourceRange.file));
+      element.properties = element.properties.filter(property =>
+          !isItemFromExternalDependency(property.sourceRange.file));
 
       return `<iron-doc-element descriptor="${escape(JSON.stringify(element))}"
                             id="${elementName}"></iron-doc-element>`;
@@ -121,12 +117,11 @@ module.exports = {
     }
 
     function getElementName() {
-      const rootPath = (itemsRootPath === "./") ? process.cwd() : itemsRootPath;
-      const normalized = rootPath.lastIndexOf(path.sep) === rootPath.length - 1
-          ? rootPath.substring(0, rootPath.length - 1)
-          : rootPath;
+      const normalizedPath = itemsRootPath.lastIndexOf(path.sep) === itemsRootPath.length - 1
+          ? itemsRootPath.substring(0, itemsRootPath.length - 1)
+          : itemsRootPath;
 
-      return normalized.substring(normalized.lastIndexOf(path.sep) + 1);
+      return normalizedPath.substring(normalizedPath.lastIndexOf(path.sep) + 1);
     }
   }
 };
