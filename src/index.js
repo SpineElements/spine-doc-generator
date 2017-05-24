@@ -12,13 +12,9 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  analyze: argv => {
-    const templateFilePath = 'src/template/element-doc-template.html';
-    const itemsRootPath = argv[2];
-
-    if (!itemsRootPath) {
-      throw new Error('Package or element root path is required');
-    }
+  generate: argv => {
+    const templateFilePath = path.join(__dirname, "template", "element-doc-template.html");
+    const itemsRootPath = path.resolve(argv[2] || './');
 
     const analyzer = new Analyzer({
       urlLoader   : new FSUrlLoader(itemsRootPath),
@@ -27,36 +23,40 @@ module.exports = {
 
     analyzer.analyzePackage().then(_package => {
       const metadata = generateAnalysis(_package, '');
-      const elements = {};
+      let elements;
 
       const processingPackage = !Boolean(
           metadata.elements.find(item => item.path.indexOf(path.sep) === -1));
 
-      const absoluteDirPath = /^(\D:\\)/.test(itemsRootPath) || /^\//.test(
-          itemsRootPath) // checking is path absolute or not
+      const absoluteDirPath = /^(\D:\\)/.test(itemsRootPath) || /^\//.test(itemsRootPath) // checking is path absolute or not
           ? itemsRootPath
           : `${process.cwd()}${path.sep}${itemsRootPath}`;
 
-      if (processingPackage) {
-        console.log(`Processing package from the ${absoluteDirPath} directory`);
+      elements = splitByElements(metadata.elements);
 
-        metadata.elements.forEach(item => {
-          const elementRootPath = item.path.substring(0,
-              item.path.indexOf(path.sep));
-          if (elements[elementRootPath]) {
-            elements[elementRootPath].push(item);
-          } else {
-            elements[elementRootPath] = [item];
-          }
-        });
-      } else {
-        console.log(`Processing element from the ${absoluteDirPath} directory`);
+      console.log(`Processing ${processingPackage ? "package" : "element"} ` +
+                  `from the ${absoluteDirPath.replace("./", "")} directory`);
 
-        const elementRootPath = itemsRootPath.substring(
-            itemsRootPath.lastIndexOf(path.sep) + 1);
-        elements[elementRootPath] = metadata.elements;
-      }
+      createDocFiles(elements, itemsRootPath, processingPackage);
+    });
 
+    function splitByElements(rawElementsData) {
+      const elements = {};
+
+      rawElementsData.forEach(item => {
+        const elementRootPath = item.path.substring(0, item.path.indexOf(path.sep)) || getElementName();
+
+        if (elements[elementRootPath]) {
+          elements[elementRootPath].push(item);
+        } else {
+          elements[elementRootPath] = [item];
+        }
+      });
+
+      return elements;
+    }
+
+    function createDocFiles(elements, itemsRootPath, processingPackage) {
       fs.readFile(templateFilePath, 'utf-8', (err, data) => {
         if (err) {
           throw new Error(`Failed to read the template\n${err.message}`);
@@ -67,8 +67,7 @@ module.exports = {
               ? `${itemsRootPath}/${rootPath}/index.html`
               : `${itemsRootPath}/index.html`;
 
-          const docFileContent = fillContent(data, elements[rootPath],
-              rootPath);
+          const docFileContent = fillContent(data, elements[rootPath], rootPath);
           fs.writeFile(docFilePath, docFileContent, err => {
             if (err) {
               throw new Error(`Failed to fill the doc file\n${err.message}`);
@@ -79,13 +78,12 @@ module.exports = {
           });
         });
       });
-    });
+    }
 
     function fillContent(fileData, elements, elementRoot) {
       const mainElement = elements.find(item => item.tagname === elementRoot);
       const sortedElements = elements.length > 1 && mainElement
-          ? [mainElement,
-            ...elements.filter(item => item.tagname !== elementRoot)]
+          ? [mainElement, ...elements.filter(item => item.tagname !== elementRoot)]
           : elements;
 
       const elementNavigationItems = sortedElements.length > 1
@@ -106,12 +104,29 @@ module.exports = {
     function getElementDocViewer(element) {
       const elementName = element.tagname;
 
+      const isItemFromExternalDependency = fileName
+          => /(\bbower_modules\b)|(\bnode_modules\b)/.test(fileName);
+
+      element.methods = element.methods.filter(method
+          => !isItemFromExternalDependency(method.sourceRange.file));
+      element.properties = element.properties.filter(property
+          => !isItemFromExternalDependency(property.sourceRange.file));
+
       return `<iron-doc-element descriptor="${escape(JSON.stringify(element))}"
                             id="${elementName}"></iron-doc-element>`;
     }
 
     function getNavigationItemOption(element) {
       return `<button contentid="${element.tagname}">${element.tagname}</button>`;
+    }
+
+    function getElementName() {
+      const rootPath = (itemsRootPath === "./") ? process.cwd() : itemsRootPath;
+      const normalized = rootPath.lastIndexOf(path.sep) === rootPath.length - 1
+          ? rootPath.substring(0, rootPath.length - 1)
+          : rootPath;
+
+      return normalized.substring(normalized.lastIndexOf(path.sep) + 1);
     }
   }
 };
