@@ -20,5 +20,5 @@
     "html-escape": "^2.0.0",
     "polymer-analyzer": "^2.0.2"
   },
-  "bin": "./src/index.js"
+  "bin": "./bin/spine-doc-generator"
 }
