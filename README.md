@@ -24,8 +24,8 @@ some-element
   - some-part.html
   - some-helper.html
 ```
-Run ```spine-doc-generator``` from the ```some-element``` folder
-or ```spine-doc-generator some-element``` from the parent folder
+Run `spine-doc-generator` from the `some-element` folder
+or `spine-doc-generator some-element` from the parent folder
 
 ### Processing a package
 
@@ -36,5 +36,5 @@ elements
   - another-element
   - third-element
 ```
-Run ```spine-doc-generator``` from the ```elements``` folder
-or ```spine-doc-generator elements``` from the parent folder
+Run `spine-doc-generator` from the `elements` folder
+or `spine-doc-generator elements` from the parent folder

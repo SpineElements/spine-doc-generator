@@ -94,22 +94,15 @@ function fillContent(fileData, elements, elementRoot) {
       : getElementDocViewer(sortedElements[0]);
 
   return fileData
-  .replace('__TITLE__', elementRoot)
-  .replace('__ELEMENT_NAVIGATION_ITEMS__', elementNavigationItems)
-  .replace('__ELEMENTS_CONTENT__', elementsContent)
-  .replace('__MAIN_ELEMENT__', elementRoot);
+    .replace('__TITLE__', elementRoot)
+    .replace('__ELEMENT_NAVIGATION_ITEMS__', elementNavigationItems)
+    .replace('__ELEMENTS_CONTENT__', elementsContent)
+    .replace('__MAIN_ELEMENT__', elementRoot);
 }
 
-function getElementDocViewer(element) {
-  const elementName = element.tagname;
-
-  const isItemFromExternalDependency = fileName =>
-      /(\bbower_components\b)|(\bnode_modules\b)/.test(fileName);
-
-  element.methods = element.methods.filter(method =>
-      !isItemFromExternalDependency(method.sourceRange.file));
-  element.properties = element.properties.filter(property =>
-      !isItemFromExternalDependency(property.sourceRange.file));
+function getElementDocViewer(rawElement) {
+  const elementName = rawElement.tagname;
+  const element = removeExternalDependencies(rawElement);
 
   return `<iron-doc-element descriptor="${escape(JSON.stringify(element))}"
                             id="${elementName}"></iron-doc-element>`;
@@ -125,4 +118,16 @@ function getElementName(itemsRootPath) {
       : itemsRootPath;
 
   return normalizedPath.substring(normalizedPath.lastIndexOf(path.sep) + 1);
+}
+
+function removeExternalDependencies(element) {
+  const isItemFromExternalDependency = fileName =>
+      /(\bbower_components\b)|(\bnode_modules\b)/.test(fileName);
+
+  element.methods = element.methods.filter(method =>
+      !isItemFromExternalDependency(method.sourceRange.file));
+  element.properties = element.properties.filter(property =>
+      !isItemFromExternalDependency(property.sourceRange.file));
+
+  return element;
 }
