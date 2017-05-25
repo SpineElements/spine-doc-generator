@@ -3,6 +3,10 @@
 The command-line tool for Web Components documentation generating.
 [Polymer-analyzer](https://github.com/Polymer/polymer-analyzer) is used under the hood.
 
+## Installation
+```bash
+npm install -g git://github.com/SpineElements/spine-doc-generator.git
+```
 
 ## Example
 
