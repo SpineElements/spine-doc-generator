@@ -5,36 +5,36 @@ The command-line tool for Web Components documentation generating.
 
 ## Installation
 ```bash
-npm install -g git://github.com/SpineElements/spine-doc-generator.git
+npm install -g SpineElements/spine-doc-generator
 ```
 
-## Example
+## Command overview
 
-### `spine-doc-generator [items-root]`
-If `items-root` omitted, the current directory is used as the root path.
+### `spine-doc-generator [element-root]`
+Where `element-root` - path to the element root directory.\
+If `element-root` is omitted, the current directory is used as the root path.
 
-Generated docs location: `items-root/element-root/index.html`.
+Generated documentation file is stored in the `element-root/index.html` file.
 
-### Processing one element
+## Usage
 
-For the next file structure:
+For the following file structure:
 ```
-some-element
-  - some-element.html
-  - some-part.html
-  - some-helper.html
+|-- some-element
+    |-- some-element.html
+    |-- some-helper.html
+    |-- some-part
+        |-- some-part.html
 ```
 Run `spine-doc-generator` from the `some-element` folder
-or `spine-doc-generator some-element` from the parent folder
+or `spine-doc-generator path/to/some-element` from any other folder.
 
-### Processing a package
-
-For the next file structure:
+Result:
 ```
-elements
-  - some-element
-  - another-element
-  - third-element
+|-- some-element
+    |-- index.html <------------ created documentation
+    |-- some-element.html
+    |-- some-helper.html
+    |-- some-part
+        |-- some-part.html
 ```
-Run `spine-doc-generator` from the `elements` folder
-or `spine-doc-generator elements` from the parent folder

@@ -23,12 +23,11 @@ module.exports = {
 
     analyzer.analyzePackage().then(_package => {
       const metadata = generateAnalysis(_package, '');
-      let elements;
 
       const processingPackage = !Boolean(
           metadata.elements.find(item => item.path.indexOf(path.sep) === -1));
 
-      elements = splitByElements(metadata.elements, itemsRootPath);
+      const elements = splitByElements(metadata.elements, itemsRootPath);
 
       console.log(`Processing ${processingPackage ? "package" : "element"} ` +
                   `from the ${itemsRootPath} directory`);
