@@ -11,11 +11,12 @@ npm install -g SpineElements/spine-doc-generator
 ## Command overview
 
 ### `spine-doc-generator [-f]`    
-Generate documentation file for an element project.
+Generate documentation for an element project.
 
-Resulting documentation file is stored in the `element-root/index.html` file.
+Creates the `index.html` documentation file in the `element-root/` directory. If such file already exists, the command will ask permission to overwrite it.
+Note: to skip this question, use `spine-doc-generator -f`.
 
-Option **`-f`** disables check for file existence (always overwrite).
+Option **`-f`** disables check for file existence(always overwrite).
 
 ## Usage
 

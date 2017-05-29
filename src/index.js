@@ -50,7 +50,7 @@ function createDocFile(templateFilePath, elements, args) {
         output: process.stdout
       });
 
-      rlInterface.question(`File ${docFilePath} already exists.\nOverwrite it? |no| `, answer => {
+      rlInterface.question(`File ${docFilePath} already exists.\nOverwrite it? |yes| `, answer => {
         fileExistsDialog(answer, rlInterface, () => writeDocFile(docFilePath, docFileContent));
       });
     } else {
@@ -61,7 +61,7 @@ function createDocFile(templateFilePath, elements, args) {
 
 function fileExistsDialog(answer, rlInterface, successCallback) {
   const lowerCaseAnswer = answer.toLowerCase();
-  if (lowerCaseAnswer === "yes" || lowerCaseAnswer === "y") {
+  if (answer === "" || lowerCaseAnswer === "yes" || lowerCaseAnswer === "y") {
     successCallback();
     rlInterface.close();
 
