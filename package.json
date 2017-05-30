@@ -1,0 +1,24 @@
+{
+  "name": "spine-doc-generator",
+  "version": "1.0.0",
+  "description": "A command line tool for documentation generating",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpineElements/spine-doc-generator.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/SpineElements/spine-doc-generator/issues"
+  },
+  "homepage": "https://github.com/SpineElements/spine-doc-generator#readme",
+  "dependencies": {
+    "html-escape": "^2.0.0",
+    "polymer-analyzer": "^2.0.2"
+  },
+  "bin": "./bin/spine-doc-generator"
+}
