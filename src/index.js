@@ -28,7 +28,7 @@ module.exports = {
     analyzer.analyzePackage().then(_package => {
       const metadata = generateAnalysis(_package, '');
 
-      console.log(`Processing element from the ${args.root} directory`);
+      console.log(`Processing element from the ${args.root} directory...`);
 
       createDocFile(templateFilePath, metadata.elements, args);
     });
@@ -80,7 +80,7 @@ function fileExistsDialog(answer, rlInterface, successCallback) {
 function writeDocFile(filePath, content) {
   fs.writeFile(filePath, content, err => {
     if (err) {
-      throw new Error(`Failed to fill the doc file\n${err.message}`);
+      throw new Error(`Failed to write the documentation file\n${err.message}`);
     }
     console.log(`Created file: ${filePath}\nDocumentation generation completed.`);
   });
